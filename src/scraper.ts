@@ -3,7 +3,8 @@ const puppeteer = require('puppeteer');
 
 type ProductProps = {
     categoria: string,
-    name: string
+    name: string,
+    price: string,
 }
 
 
@@ -23,10 +24,11 @@ const bestseller = async () => {
             const newName = categoria.split(' ')[3]
             item.querySelectorAll('.a-carousel-card ').forEach((element: { querySelector: (arg0: string) => { (): any; new(): any; innerText: string; }; }, index: number) => {
                 const name = element?.querySelector('a span div')?.innerText.trim()
-                if (index < 1 && name && newName === 'Ferramentas') {
-                    bestsellers.push({categoria: newName, name})
-                } else if (index < 2 && name && newName === 'Cozinha') {
-                    bestsellers.push({categoria: newName, name})
+                const price = element?.querySelector('._cDEzb_p13n-sc-price_3mJ9Z')?.innerText.trim()
+                if (index < 2 && name && newName === 'Ferramentas') {
+                    bestsellers.push({categoria: newName, name, price})
+                } else if (index < 3 && name && newName === 'Livros') {
+                    bestsellers.push({categoria: newName, name, price})
                 }
                 
             })
