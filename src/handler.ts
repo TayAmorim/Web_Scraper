@@ -11,7 +11,7 @@ export type ProductProps = {
 const dbClient = new DynamoDBClient({region: 'sa-east-1'});
 const nameTable = 'products'
 
-const handlerBd = async () =>  {
+export const handlerScrapperBd = async () =>  {
   try {
     const listProduct: ProductProps[] | undefined = await bestseller();
     
@@ -36,4 +36,4 @@ const handlerBd = async () =>  {
   } 
 }
 
-handlerBd();
+
