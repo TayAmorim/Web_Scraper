@@ -1,7 +1,7 @@
 const puppeteer = require('puppeteer');
 
 
-type ProductProps = {
+export type ProductProps = {
     categoria: string,
     name: string,
     price: string,

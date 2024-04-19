@@ -1,17 +1,39 @@
-import { bestseller } from './scraper';
+import { bestseller } from "./scraper";
+const { DynamoDBClient, PutItemCommand } = require('@aws-sdk/client-dynamodb');
 
 
-async function handleBd () {
-    try {
-        const listProduct = await bestseller()
-    console.log(listProduct);
-    } catch (error) {
-        
-    }
+export type ProductProps = {
+  categoria: string;
+  name: string;
+  price: string;
+};
 
-   
+const dbClient = new DynamoDBClient({region: 'sa-east-1'});
+const nameTable = 'products'
+
+const handlerBd = async () =>  {
+  try {
+    const listProduct: ProductProps[] | undefined = await bestseller();
     
 
+    if (listProduct) {
+      for (let product of listProduct) {
+        const params = {
+            TableName: nameTable,
+            Item: {
+                ...product
+            }
+        }
+        await dbClient.send(new PutItemCommand(params))
+      }
+    }
+
+    return {status: 200, message: 'Produtos cadastrados com sucesso'}
+  } catch (error) {
+    console.log('Erro ao cadastrar produtos no Banco de dados', error);
+    return {status: 500, message: 'Erro ao cadastrar no banco de dados'}
+    
+  } 
 }
 
-handleBd()
+handlerBd();
