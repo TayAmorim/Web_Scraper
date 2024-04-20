@@ -1,0 +1,27 @@
+
+service: bgcscraper
+
+frameworkVersion: "3"
+provider:
+  name: aws
+  runtime: nodejs18.x
+
+functions:
+  scraper:
+    handler: dist/bgcScraper/handler.handlerScrapperBd
+
+resources:
+  Resources:
+    ProductsTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: products
+        AttributeDefinitions:
+          - AttributeName: productId
+            AttributeType: S 
+        KeySchema:
+          - AttributeName: productId
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 5
+          WriteCapacityUnits: 5
