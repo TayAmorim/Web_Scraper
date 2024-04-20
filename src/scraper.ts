@@ -1,11 +1,8 @@
 const puppeteer = require('puppeteer');
+import { ProductProps } from "./scraperTypes";
 
 
-export type ProductProps = {
-    categoria: string,
-    name: string,
-    price: string,
-}
+
 
 export const bestseller = async (): Promise<ProductProps[] | undefined>  => {
     
