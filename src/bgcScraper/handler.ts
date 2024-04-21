@@ -1,40 +1,53 @@
-import { ProductProps } from "../scraperTypes";
-const { bestseller } = require("../scraper");
-const { DynamoDBClient, PutItemCommand } = require('@aws-sdk/client-dynamodb');
+import { bestseller } from "../scraper"
+import { DynamoDBClient } from '@aws-sdk/client-dynamodb'
+import {
+  DynamoDBDocumentClient,
+  PutCommand,
+} from "@aws-sdk/lib-dynamodb";
 
 
 
 
 const dbClient = new DynamoDBClient({region: 'sa-east-1'});
+const dynamo = DynamoDBDocumentClient.from(dbClient);
 const nameTable = 'products'
 
 export const handlerScrapperBd = async () =>  {
   try {
-    const listProduct: ProductProps[] | undefined = await bestseller();
+    const listProduct = await bestseller();
     
-
-    if (listProduct) {
+    if (listProduct != null && listProduct.length > 0) {
       for (let product of listProduct) {
         const params = {
             TableName: nameTable,
             Item: {
-                ...product
+              ...product
             }
         }
-        await dbClient.send(new PutItemCommand(params))
+        await dynamo.send(new PutCommand(params))
+        
       }
+      return {
+        statusCode: 200,
+        body: JSON.stringify(
+          {
+            message: JSON.stringify(listProduct),
+          },
+        ),
+      };
     }
+    
     return {
-      statusCode: 200,
+      statusCode: 404,
       body: JSON.stringify(
         {
-          message: 'Produtos cadastrados com sucesso',
+          message: `Lista vazia ${listProduct}`,
         },
       ),
     };
+    
   } catch (error) {
-    console.log('Erro ao cadastrar produtos no Banco de dados', error);
-    return {status: 500, message: 'Erro ao cadastrar no banco de dados'}
+    return {status: 500, message: 'Erro ao cadastrar no banco de dados', error}
     
   } 
 }
