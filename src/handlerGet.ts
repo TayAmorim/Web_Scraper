@@ -10,10 +10,20 @@ export const getItems = async () => {
     const itemsResponse = await dynamo.send(
       new ScanCommand({ TableName: nameTable })
     );
+    const itemsAll = itemsResponse.Items;
+
+
+    const itemsArray = itemsAll?.map((item) => ({
+      productId: item.productId.S,
+      name: item.name.S,
+      categoria: item.categoria.S,
+      price: item.price.S,
+    }));
+
     return {
       statusCode: 200,
       body: JSON.stringify({
-        items: JSON.stringify(itemsResponse.Items),
+        items: itemsArray,
       }),
     };
   } catch (error) {
