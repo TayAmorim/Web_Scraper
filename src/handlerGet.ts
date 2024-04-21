@@ -7,19 +7,19 @@ const nameTable = "products";
 
 export const getItems = async () => {
   try {
-    const itemsResponde = await dynamo.send(
+    const itemsResponse = await dynamo.send(
       new ScanCommand({ TableName: nameTable })
     );
     return {
       statusCode: 200,
       body: JSON.stringify({
-        items: JSON.stringify(itemsResponde),
+        items: JSON.stringify(itemsResponse.Items),
       }),
     };
   } catch (error) {
     return {
-      status: 500,
-      message: "Erro ao cadastrar no banco de dados",
+      status: 404,
+      message: "Erro pesquisar no Banco de dados",
       error,
     };
   }
