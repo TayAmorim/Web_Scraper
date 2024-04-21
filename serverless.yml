@@ -2,6 +2,9 @@ service: bgcscraper
 
 frameworkVersion: "3"
 
+plugins: 
+  - serverless-offline
+
 provider:
   name: aws
   runtime: nodejs20.x
