@@ -1,10 +1,15 @@
-
 service: bgcscraper
 
 frameworkVersion: "3"
 provider:
   name: aws
-  runtime: nodejs18.x
+  runtime: nodejs20.x
+  iamRoleStatements:
+    - Effect: Allow
+      Action: 
+        - dynamodb:PutItem
+      Resource: 
+        - "arn:aws:dynamodb:us-east-1:585247497817:table/products"
 
 functions:
   scraper:
