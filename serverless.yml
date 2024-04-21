@@ -1,26 +1,27 @@
 service: bgcscraper
 
 frameworkVersion: "3"
+
 provider:
   name: aws
   runtime: nodejs20.x
   iamRoleStatements:
     - Effect: Allow
-      Action: 
+      Action:
         - dynamodb:PutItem
         - dynamodb:GetItem
-      Resource: 
+        - dynamodb:DeleteItem
+      Resource:
         - "arn:aws:dynamodb:as-east-1:585247497817:table/products"
 
 functions:
   scraper:
-    handler: dist/handler.handlerScrapperBd
+    handler: dist/products/handler.handlerScrapperBd
     events:
       - http:
-          path: /products/scrapper
+          path: /scrapper
           method: GET
 
-  
   getItems:
     handler: dist/products/handlerGet.getItems
     events:
@@ -28,14 +29,35 @@ functions:
           path: /items
           method: GET
 
+  getItem:
+    handler: dist/products/itemGet.getItem
+    events:
+      - http:
+          path: /items/{id}
+          method: GET
+          request:
+            parameters:
+              paths:
+                id: true
+
+  deleteItem:
+    handler: dist/products/itemDelete.deleteItem
+    events:
+      - http:
+          path: /items/{id}
+          method: DELETE
+          request:
+            parameters:
+              paths:
+                id: true
+
   getAllCategory:
     handler: dist/categories/category.getAll
     events:
       - http:
           path: /category
           method: GET
-
-
+  
 resources:
   Resources:
     ProductsTable:
@@ -44,7 +66,7 @@ resources:
         TableName: products
         AttributeDefinitions:
           - AttributeName: productId
-            AttributeType: S 
+            AttributeType: S
         KeySchema:
           - AttributeName: productId
             KeyType: HASH
