@@ -1,4 +1,4 @@
-import { bestseller } from "../scraper"
+import { bestseller } from "./scraper"
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb'
 import {
   DynamoDBDocumentClient,
@@ -8,7 +8,7 @@ import {
 
 
 
-const dbClient = new DynamoDBClient({region: 'sa-east-1'});
+const dbClient = new DynamoDBClient({region: 'us-east-1'});
 const dynamo = DynamoDBDocumentClient.from(dbClient);
 const nameTable = 'products'
 

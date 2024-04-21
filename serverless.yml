@@ -13,7 +13,7 @@ provider:
 
 functions:
   scraper:
-    handler: dist/bgcScraper/handler.handlerScrapperBd
+    handler: dist/handler.handlerScrapperBd
 
 resources:
   Resources:
