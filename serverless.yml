@@ -8,6 +8,7 @@ plugins:
 provider:
   name: aws
   runtime: nodejs20.x
+  timeout: 20
   iamRoleStatements:
     - Effect: Allow
       Action:
@@ -20,10 +21,7 @@ provider:
 functions:
   scraper:
     handler: dist/products/handler.handlerScrapperBd
-    events:
-      - http:
-          path: /scrapper
-          method: GET
+
 
   getItems:
     handler: dist/products/handlerGet.getItems
@@ -31,6 +29,7 @@ functions:
       - http:
           path: /items
           method: GET
+    timeout: 20
 
   getItem:
     handler: dist/products/itemGet.getItem
