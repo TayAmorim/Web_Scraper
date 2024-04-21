@@ -1,15 +1,19 @@
-const puppeteer = require('puppeteer');
 import { ProductProps } from "./scraperTypes";
+import chromium  from '@sparticuz/chromium'
+import puppeteer  from 'puppeteer-core'
 
-
-
-
-export const bestseller = async (): Promise<ProductProps[] | undefined>  => {
+export const bestseller = async (): Promise<ProductProps[]>  => {
     
-    const browser = await puppeteer.launch();
+    const browser = await puppeteer.launch({
+        args: chromium.args,
+        defaultViewport: chromium.defaultViewport,
+        executablePath: await chromium.executablePath(),
+        headless: chromium.headless,
+        ignoreHTTPSErrors: true,
+      });
     const page = await browser.newPage();
 
-    await page.goto("https://www.amazon.com.br/bestsellers)")
+    await page.goto("https://www.amazon.com.br/bestsellers")
 
 
     try {
@@ -19,13 +23,12 @@ export const bestseller = async (): Promise<ProductProps[] | undefined>  => {
             items.forEach((item) => {
                 const categoria = item?.querySelector('.a-carousel-heading')?.innerText.trim()
                 const newName = categoria.split(' ')[3]
-                item.querySelectorAll('.a-carousel-card ').forEach((element: { querySelector: (arg0: string) => { (): any; new(): any; innerText: string; }; }, index: number) => {
-                    const name = element?.querySelector('a span div')?.innerText.trim()
-                    const price = element?.querySelector('._cDEzb_p13n-sc-price_3mJ9Z')?.innerText.trim()
-                    if (index < 2 && name && newName === 'Ferramentas') {
-                        bestsellers.push({categoria: newName, name, price})
-                    } else if (index < 3 && name && newName === 'Livros') {
-                        bestsellers.push({categoria: newName, name, price})
+                item.querySelectorAll('.a-carousel-card').forEach((element: HTMLLIElement, index: number) => {
+                    const productId = element.querySelector<HTMLDivElement>('div')?.dataset.asin;
+                    const name = element.querySelector<HTMLDivElement>('a span div')?.innerText.trim()
+                    const price = element.querySelector<HTMLSpanElement>('.a-color-price')?.innerText.trim()
+                    if (index < 2 && name && price && productId) {
+                        bestsellers.push({categoria: newName, name, price, productId})
                     }
                     
                 })
@@ -39,9 +42,8 @@ export const bestseller = async (): Promise<ProductProps[] | undefined>  => {
         
         
     } catch (error) {
-        console.log({status: 500, mensage: 'Erro ao buscar Produto'});
         await browser.close();
-        return undefined
+        throw error
         
         
     }
@@ -49,4 +51,3 @@ export const bestseller = async (): Promise<ProductProps[] | undefined>  => {
 }
 
 
-module.exports = {bestseller};
