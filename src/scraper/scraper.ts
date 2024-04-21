@@ -1,19 +1,14 @@
 import { ProductProps } from "../scraperTypes";
 import chromium  from '@sparticuz/chromium'
-import puppeteer  from 'puppeteer-core'
+import puppeteer from 'puppeteer';
 
 export const bestseller = async (): Promise<ProductProps[]>  => {
     
-    const browser = await puppeteer.launch({
-        args: chromium.args,
-        defaultViewport: chromium.defaultViewport,
-        executablePath: await chromium.executablePath(),
-        headless: chromium.headless,
-        ignoreHTTPSErrors: true,
-      });
+    const browser = await puppeteer.launch();
     const page = await browser.newPage();
-
+    
     await page.goto("https://www.amazon.com.br/bestsellers")
+    await page.setViewport({width: 1080, height: 1024});
 
 
     try {
