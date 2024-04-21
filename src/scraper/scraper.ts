@@ -1,4 +1,4 @@
-import { ProductProps } from "./scraperTypes";
+import { ProductProps } from "../scraperTypes";
 import chromium  from '@sparticuz/chromium'
 import puppeteer  from 'puppeteer-core'
 

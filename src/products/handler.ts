@@ -1,4 +1,4 @@
-import { bestseller } from "./scraper";
+import { bestseller } from "../scraper/scraper";
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 import { DynamoDBDocumentClient, PutCommand } from "@aws-sdk/lib-dynamodb";
 

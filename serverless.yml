@@ -8,12 +8,33 @@ provider:
     - Effect: Allow
       Action: 
         - dynamodb:PutItem
+        - dynamodb:GetItem
       Resource: 
-        - "arn:aws:dynamodb:us-east-1:585247497817:table/products"
+        - "arn:aws:dynamodb:as-east-1:585247497817:table/products"
 
 functions:
   scraper:
     handler: dist/handler.handlerScrapperBd
+    events:
+      - http:
+          path: /products/scrapper
+          method: GET
+
+  
+  getItems:
+    handler: dist/products/handlerGet.getItems
+    events:
+      - http:
+          path: /items
+          method: GET
+
+  getAllCategory:
+    handler: dist/categories/category.getAll
+    events:
+      - http:
+          path: /category
+          method: GET
+
 
 resources:
   Resources:
