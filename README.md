@@ -87,7 +87,7 @@ Deleta item pelo id
 
   ```
 
-### Buscar todas as categorias
+### 4. Buscar todas as categorias
 Retorna uma lista com todas as categorias cadastradas no banco de dados.
 
 - **URL:** [dev/category](https://eoe4kudjah.execute-api.us-east-1.amazonaws.com/dev/category)
