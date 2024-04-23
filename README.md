@@ -6,6 +6,7 @@
 <p align="center" >
   <img src="./src/assets/web_scraping.gif" alt="Vídeo demostrativo da aplicação">
 </p>
+
 ## Projeto
 
 Desenvolvimento de um Sistema de Web Scraping dos produtos mais vendidos da Amazon. Os produtos são capturados e salvos com as informações de categoria, nome, id, preço e disponibilizados para serem consumidos por uma API e populados em um banco de dados. 
